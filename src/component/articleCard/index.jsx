@@ -14,35 +14,16 @@ const ArticleCard = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getNews())
+    dispatch(getNews());
   }, [dispatch]);
-  if (isNewsLoading) return <h2 className="text-center py-10">Loading...</h2>;
+  if (isNewsLoading)
+    return <h2 className="text-center text-[20px]">Loading...</h2>;
   if (!article)
-    return (
-      <h2 className="text-center py-10 ">Article not found</h2>
-    );
+    return <h2 className="text-center py-10 ">Article not found</h2>;
 
   return (
     <>
       <div className="flex flex-col gap-[15px]">
-        {/* <div className="w-[181px] bg-white h-[30px] rounded-full flex justify-between   items-center ">
-          <div>
-            <FilterButton label={"Cardiology"} classes={"h-[26px]"} />
-          </div>
-          <div className="w-[71px] h-[18px] font-[400] text-[14px] leading-[130%] text-[#375E6C]">
-            3 min read
-          </div>
-        </div> */}
-
-        <h1 className="w-[98%]  font-[600] text-[32px] sm:text-[40px] leading-[130%] text-[#002A3C]">
-          {article?.text}
-        </h1>
-
-        <p className="w-[98%]  ">
-          Recent immunotherapy breakthroughs harness the immune system, offering
-          hope for <br className="hidden sm:block" /> more effective cancer
-          treatments beyond traditional chemotherapy and radiation.
-        </p>
         <div className=" flex justify-between items-center  lg:hidden ">
           <div className="flex gap-5">
             <div className="w-[40px] h-[40px] bg-white flex justify-center  rounded-[8px] border-[1px] border-[#D6E0E4]  items-center">
