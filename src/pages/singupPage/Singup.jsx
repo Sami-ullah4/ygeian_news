@@ -7,43 +7,35 @@ import bg from "../../assets/bg/bg_singup.jpg";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { register } from "../../features/auth/auth.action";
+import { resetAuthState } from "../../features/auth/auth.slice";
 
 const Singup = () => {
+  const [registerData, setResgisterData] = useState({
+    email: "",
+    fullName: "",
+    password: "",
+    confirmPassword: "",
+  });
   const dispatch = useDispatch();
-  const {
-    isAuthenticated,
-    isRegisterSuccess,
-    isRegisterLoading,
-    isRegisterFailed,
-    error,
-  } = useSelector((state) => state?.auth);
+  const { isRegisterSuccess, isRegisterLoading, isRegisterFailed, error } =
+    useSelector((state) => state?.auth);
   const navigate = useNavigate();
-
-  useEffect(() => {
-    if (isAuthenticated) {
-      setTimeout(() => {
-        navigate("/login");
-      }, 2000);
-    }
-  }, [isAuthenticated, navigate]);
-
+  /////////////////////////handleSubmot//////////
   const handleOnSubmit = (e) => {
     e.preventDefault();
-    const { email, name, password } = registerData;
-    if (!email || !name || !password) {
+
+    const { email, fullName, password } = registerData;
+    if (!email || !fullName || !password) {
       alert("Please fill all fields");
+      return;
+    }
+    if (password !== registerData.confirmPassword) {
+      alert("Passwords do not match");
       return;
     }
     dispatch(register(registerData));
   };
 
-  const [registerData, setResgisterData] = useState({
-    email: "",
-    name: "",
-    password: "",
-    id: Date.now(),
-  });
-  console.log(registerData);
   const handleOnChange = (e) => {
     const { name, value } = e.target;
     setResgisterData((prev) => ({
@@ -51,6 +43,20 @@ const Singup = () => {
       [name]: value,
     }));
   };
+
+  useEffect(() => {
+    if (isRegisterSuccess) {
+      setTimeout(() => {
+        navigate("/login");
+        dispatch(resetAuthState())
+      }, 2000);
+    }
+  }, [isRegisterSuccess, navigate, dispatch]);
+
+  useEffect(() => {
+    dispatch(resetAuthState());
+  }, [dispatch]);
+
   return (
     <>
       <section className="flex w-[100%]">
@@ -128,8 +134,8 @@ const Singup = () => {
                   />
                   <input
                     type="text"
-                    name="name"
-                    value={registerData.name}
+                    name="fullName"
+                    value={registerData.fullName}
                     onChange={handleOnChange}
                     className="w-[100%] lg:w-full border border-[#D6E0E4] p-3 rounded-[12px] placeholder:text-[#375E6C] focus:outline-[#43B3E5]"
                     placeholder="Name"
@@ -143,12 +149,22 @@ const Singup = () => {
                       className="w-[100%] lg:w-full h-[48px] border border-[#D6E0E4] pr-12 pl-4 rounded-[12px] placeholder:text-[#375E6C] text-[16px] focus:outline-[#43B3E5]"
                       placeholder="Password"
                     />
+
                     <img
                       src={eye}
                       alt="eye icon"
                       className="absolute right-4 top-1/2 -translate-y-1/2 cursor-pointer w-[24px] h-[15.51px]"
                     />
                   </div>
+                  <input
+                    type="password"
+                    name="confirmPassword"
+                    value={registerData.confirmPassword}
+                    onChange={handleOnChange}
+                    className="w-[100%] lg:w-full h-[48px] border border-[#D6E0E4] pr-12 pl-4 rounded-[12px] placeholder:text-[#375E6C] text-[16px] focus:outline-[#43B3E5]"
+                    placeholder="Confirm Password"
+                  />
+
                   <button
                     type="submit"
                     className="mt-2 bg-[#43B3E5] text-white p-3 rounded-[12px] w-full"
