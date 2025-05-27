@@ -6,7 +6,7 @@ import NewsCard from "../../component/newsCard";
 const Home = () => {
   const [newsData, setNewsData] = useState([]);
   const dispatch = useDispatch();
-  const { news, isNews, isLoading } = useSelector((state) => state?.news);
+  const { news, isNews, isNewsLoading } = useSelector((state) => state?.news);
 
   useEffect(() => {
     dispatch(getNews());
@@ -18,9 +18,7 @@ const Home = () => {
     }
   }, [news, isNews]);
 
-  if (isLoading) {
-    <h1>Loading...</h1>;
-  }
+ 
 
   return (
     <>
@@ -35,8 +33,7 @@ const Home = () => {
           </p>
         </div>
       </section>
-
-      <NewsCard newsData={newsData} />
+      {isNewsLoading ? <h1 className="text-center text-[20px] ">Loading...</h1> : <NewsCard newsData={newsData} />}
     </>
   );
 };
